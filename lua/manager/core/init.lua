@@ -81,14 +81,6 @@ local function _process_update_queue(queue)
     })
 end
 
-function M._get()
-    local plugins = {}
-    for id, information in pairs(M.plugins) do
-        plugins[id] = information.status
-    end
-    return plugins
-end
-
 function M.add(spec)
     if not spec.id or not spec.url then
         error("Plugin must have 'id' and 'url'. spec: " .. vim.inspect(spec))
