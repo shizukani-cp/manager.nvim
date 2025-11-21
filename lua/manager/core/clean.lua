@@ -1,5 +1,5 @@
-return function(plugins, install_base_path)
-    local installed_dirs = vim.fn.globpath(install_base_path, '*', true, true)
+return function(plugins)
+    local installed_dirs = vim.fn.globpath(require("manager.core.path").install_base_path, '*', true, true)
     local removed_plugins = {}
 
     if #installed_dirs == 0 then

@@ -1,9 +1,9 @@
-return function(spec, plugins, install_base_path)
+return function(spec, plugins)
     if not spec.id or not spec.url then
         error("Plugin must have 'id' and 'url'. spec: " .. vim.inspect(spec))
     end
     if plugins[spec.id] then return end
-    local install_path = vim.fs.joinpath(install_base_path, spec.id)
+    local install_path = require("manager.core.path").plugin_path(spec.id)
     local is_installed = vim.fn.isdirectory(install_path) == 1
     plugins[spec.id] = {
         spec = spec,

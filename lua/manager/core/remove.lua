@@ -1,11 +1,11 @@
-return function(id, plugins, install_base_path)
+return function(id, plugins)
     local plugin = plugins[id]
     if not plugin then
         vim.notify("Plugin '" .. id .. "' not found.", vim.log.levels.WARN)
         return
     end
 
-    local path = vim.fs.joinpath(install_base_path, id)
+    local path = require("manager.core.path").plugin_path(id)
     if vim.fn.isdirectory(path) == 1 then
         local ok, err = pcall(vim.fn.delete, path, 'rf')
         if ok then

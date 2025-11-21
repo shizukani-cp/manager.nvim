@@ -1,16 +1,13 @@
-local install_base_path = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'manager', 'opt')
-local manager_installed_path = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'manager', 'start', 'manager.nvim')
-
 local M = {}
 
 M.plugins = {}
 
 M.add = function(spec)
-    require("manager.core.add")(spec, M.plugins, install_base_path)
+    require("manager.core.add")(spec, M.plugins)
 end
 
 M.clean = function()
-    require("manager.core.clean")(M.plugins, install_base_path)
+    require("manager.core.clean")(M.plugins)
 end
 
 M.load = function(id)
@@ -22,7 +19,7 @@ M.lock = function()
 end
 
 M.remove = function(id)
-    require("manager.core.remove")(id, M.plugins, install_base_path)
+    require("manager.core.remove")(id, M.plugins)
 end
 
 M.unlock = function()
@@ -30,7 +27,7 @@ M.unlock = function()
 end
 
 M.update = function(id)
-    require("manager.core.update")(id, M.plugins, install_base_path, manager_installed_path)
+    require("manager.core.update")(id, M.plugins)
 end
 
 return M
