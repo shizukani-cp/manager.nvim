@@ -1,0 +1,67 @@
+*manager.txt*    Minimal plugin manager for NeoVim   Last Change: 2025-12-02
+
+==============================================================================
+INTRODUCTION                                              *manager.nvim*
+
+manager.nvim is a lightweight plugin manager for NeoVim.
+It is designed for users who want a minimal but functional way to manage plugins.
+
+==============================================================================
+
+INSTALLATION                                            *manager-install*
+
+To install manager.nvim, clone this repository into your 'packpath':
+
+    :!git clone https://github.com/shizukani-cp/manager.nvim.git \
+        ~/.config/nvim/pack/manager/start/manager.nvim
+
+You need NeoVim 0.5 or newer and Git installed.
+
+==============================================================================
+
+USAGE                                                   *manager-usage*
+
+To use manager.nvim, load it in your configuration file and add your plugins:
+
+>lua
+    local manager = require("manager.core")
+
+    manager.add({
+        id = "telescope.nvim",
+        url = "https://github.com/nvim-telescope/telescope.nvim",
+        dependencies = {
+            "plenary.nvim",
+        },
+        config = function()
+            -- Write your config here...
+        end
+    })
+
+    manager.add({
+        id = "plenary.nvim",
+        url = "https://github.com/nvim-lua/plenary.nvim",
+    })
+
+    manager.load("telescope.nvim")
+<
+
+Each plugin configuration requires an `id` (unique name) and a `url` (the plugin GitHub repository).
+You can specify dependencies and a `config` function to set up your plugin after loading if needed.
+To load a plugin, use `manager.load("plugin_id")`.
+
+==============================================================================
+
+CONTRIBUTING                                            *manager-contrib*
+
+Contributions, bug reports, and feature requests are welcome!
+Please open an issue or pull request on GitHub.
+
+==============================================================================
+
+LICENSE                                                 *manager-license*
+
+This project is licensed under the MIT License.
+
+==============================================================================
+
+vim:tw=78:ft=help:norl:
