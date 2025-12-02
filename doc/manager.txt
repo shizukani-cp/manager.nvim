@@ -3,17 +3,28 @@
 ==============================================================================
 INTRODUCTION                                              *manager.nvim*
 
-manager.nvim is a lightweight plugin manager for NeoVim.
+NeoVim Plugin Manager with Limited Features
 It is designed for users who want a minimal but functional way to manage plugins.
 
 ==============================================================================
 
 INSTALLATION                                            *manager-install*
 
-To install manager.nvim, clone this repository into your 'packpath':
+To install manager.nvim, add into your `init.lua`:
 
-    :!git clone https://github.com/shizukani-cp/manager.nvim.git \
-        ~/.config/nvim/pack/manager/start/manager.nvim
+>lua
+    local managerpath = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'manager', 'start', 'manager.nvim')
+    if not (vim.uv or vim.loop).fs_stat(managerpath) then
+        local managerrepo = "https://github.com/shizukani-cp/manager.nvim.git"
+        vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=main", managerrepo, managerpath })
+        if vim.v.shell_error ~= 0 then
+            vim.api.nvim_echo({
+                { "Failed to clone manager.nvim:\n", "ErrorMsg" },
+            }, true, {})
+        end
+    end
+    vim.opt.runtimepath:prepend(managerpath)
+>
 
 You need NeoVim 0.5 or newer and Git installed.
 
@@ -48,19 +59,6 @@ To use manager.nvim, load it in your configuration file and add your plugins:
 Each plugin configuration requires an `id` (unique name) and a `url` (the plugin GitHub repository).
 You can specify dependencies and a `config` function to set up your plugin after loading if needed.
 To load a plugin, use `manager.load("plugin_id")`.
-
-==============================================================================
-
-CONTRIBUTING                                            *manager-contrib*
-
-Contributions, bug reports, and feature requests are welcome!
-Please open an issue or pull request on GitHub.
-
-==============================================================================
-
-LICENSE                                                 *manager-license*
-
-This project is licensed under the MIT License.
 
 ==============================================================================
 
