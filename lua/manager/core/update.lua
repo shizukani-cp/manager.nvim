@@ -4,30 +4,17 @@ local function _process_update_queue(queue, plugins)
     end
 
     local id = table.remove(queue, 1)
-    local stderr_data = {}
+    local install_path
 
     if id == "self" then
-        local install_path = vim.fn.expand(require("manager.core.path").manager_installed_path)
-        vim.fn.jobstart({ 'git', '-C', install_path, 'pull', '--ff-only' }, {
-            on_stderr = function(_, data)
-                for _, line in ipairs(data) do
-                    if line ~= "" then table.insert(stderr_data, line) end
-                end
-            end,
-            on_exit = function(_, code)
-                vim.schedule(function()
-                    if code ~= 0 and #stderr_data > 0 then
-                        vim.notify("manager ('self') update failed:\n" .. table.concat(stderr_data, "\n"),
-                            vim.log.levels.ERROR)
-                    end
-                    _process_update_queue(queue, plugins)
-                end)
-            end,
-        })
-        return
+        install_path = require("manager.core.path").manager_installed_path
+    else
+        install_path = require("manager.core.path").plugin_path(id)
     end
 
-    local install_path = vim.fn.expand(require("manager.core.path").plugin_path(id))
+    install_path = vim.fn.expand(install_path)
+
+    local stderr_data = {}
 
     vim.fn.jobstart({ 'git', '-C', install_path, 'pull', '--ff-only' }, {
         on_stderr = function(_, data)
@@ -39,7 +26,7 @@ local function _process_update_queue(queue, plugins)
             vim.schedule(function()
                 if code ~= 0 and #stderr_data > 0 then
                     local msg = table.concat(stderr_data, "\n")
-                    vim.notify("'" .. id .. "' update failed:\n" .. msg, vim.log.levels.ERROR)
+                    vim.notify("Update failed [" .. id .. "]:\n" .. msg, vim.log.levels.ERROR)
                 end
                 _process_update_queue(queue, plugins)
             end)
@@ -61,6 +48,5 @@ return function(target_id, plugins)
     if #queue == 0 then
         return
     end
-
     _process_update_queue(queue, plugins)
 end
