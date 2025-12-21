@@ -19,13 +19,7 @@ local function _process_update_queue(queue, plugins)
         return
     end
 
-    local plugin = plugins[id]
-    local install_path = require("manager.core.path").plugin_path(id)
-
-    if not plugin or plugin.status ~= 'installed' then
-        _process_update_queue(queue, plugins)
-        return
-    end
+    local install_path = vim.fn.expand(require("manager.core.path").plugin_path(id))
 
     vim.fn.jobstart({ 'git', '-C', install_path, 'pull' }, {
         on_exit = function(_, code)
