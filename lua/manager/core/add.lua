@@ -1,4 +1,4 @@
-return function(spec, plugins)
+return function(spec, plugins, logger)
     if not spec.id or not spec.url then
         error("Plugin must have 'id' and 'url'. spec: " .. vim.inspect(spec))
     end
@@ -27,13 +27,14 @@ return function(spec, plugins)
                     if code == 0 then
                         plugin.status = 'installed'
                         vim.cmd('packloadall!')
+                        logger:info("Successfuly installed " .. "spec.id")
                         for _, callback in ipairs(plugin.on_installed_callbacks) do
                             callback()
                         end
                         plugin.on_installed_callbacks = {}
                     else
                         plugin.status = 'failed'
-                        vim.notify("'" .. spec.id .. "' installation failed.", vim.log.levels.ERROR)
+                        logger:error("'" .. spec.id .. "' installation failed.")
                     end
                 end)
             end,

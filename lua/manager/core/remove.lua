@@ -1,7 +1,7 @@
-return function(id, plugins)
+return function(id, plugins, logger)
     local plugin = plugins[id]
     if not plugin then
-        vim.notify("Plugin '" .. id .. "' not found.", vim.log.levels.WARN)
+        logger:warn("Plugin '" .. id .. "' not found.")
         return
     end
 
@@ -10,11 +10,11 @@ return function(id, plugins)
         local ok, err = pcall(vim.fn.delete, path, 'rf')
         if ok then
             plugin.status = 'new'
-            vim.notify("Plugin '" .. id .. "' removed.", vim.log.levels.INFO)
+            logger:info("Plugin '" .. id .. "' removed.")
         else
-            vim.notify("Failed to remove '" .. id .. "': " .. err, vim.log.levels.ERROR)
+            logger:error("Failed to remove '" .. id .. "': " .. err)
         end
     else
-        vim.notify("Plugin directory for '" .. id .. "' does not exist.", vim.log.levels.WARN)
+        logger:warn("Plugin directory for '" .. id .. "' does not exist.")
     end
 end

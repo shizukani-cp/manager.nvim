@@ -1,4 +1,4 @@
-local function _process_update_queue(queue, plugins)
+local function _process_update_queue(queue, plugins, logger)
     if #queue == 0 then
         return
     end
@@ -26,7 +26,9 @@ local function _process_update_queue(queue, plugins)
             vim.schedule(function()
                 if code ~= 0 and #stderr_data > 0 then
                     local msg = table.concat(stderr_data, "\n")
-                    vim.notify("Update failed [" .. id .. "]:\n" .. msg, vim.log.levels.ERROR)
+                    logger:error("Update failed [" .. id .. "]:\n" .. msg)
+                else
+                    logger:info("Successfuly Updated " .. id)
                 end
                 _process_update_queue(queue, plugins)
             end)
@@ -34,7 +36,7 @@ local function _process_update_queue(queue, plugins)
     })
 end
 
-return function(target_id, plugins)
+return function(target_id, plugins, logger)
     local queue = {}
 
     if target_id then
@@ -48,5 +50,5 @@ return function(target_id, plugins)
     if #queue == 0 then
         return
     end
-    _process_update_queue(queue, plugins)
+    _process_update_queue(queue, plugins, logger)
 end

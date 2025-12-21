@@ -4,7 +4,7 @@ local load_queue = {}
 
 local M = {}
 
-local function _do_load(id, plugins)
+local function _do_load(id, plugins, logger)
     if loaded_plugins[id] then return end
     local plugin = plugins[id]
     vim.cmd('packadd ' .. plugin.spec.id)
@@ -13,9 +13,10 @@ local function _do_load(id, plugins)
     end
     loaded_plugins[id] = true
     plugin.status = "loaded"
+    logger:info("Successfuly loaded " .. id)
 end
 
-local function _load_with_deps_check(id, plugins)
+local function _load_with_deps_check(id, plugins, logger)
     if loaded_plugins[id] then return end
     local plugin = plugins[id]
     local dependencies = plugin.spec.dependencies or {}
@@ -23,7 +24,7 @@ local function _load_with_deps_check(id, plugins)
     local pending_deps = {}
 
     for _, dep_id in ipairs(dependencies) do
-        M.load(dep_id, plugins)
+        M.load(dep_id, plugins, logger)
         local dep_plugin = plugins[dep_id]
         if dep_plugin.status ~= 'installed' and dep_plugin.status ~= 'loaded' then
             all_deps_installed = false
@@ -32,7 +33,7 @@ local function _load_with_deps_check(id, plugins)
     end
 
     if all_deps_installed then
-        _do_load(id, plugins)
+        _do_load(id, plugins, logger)
     else
         local loaded_deps_count = 0
         local total_deps = #pending_deps
@@ -40,7 +41,7 @@ local function _load_with_deps_check(id, plugins)
         local function check_and_load_self()
             loaded_deps_count = loaded_deps_count + 1
             if loaded_deps_count == total_deps then
-                _do_load(id, plugins)
+                _do_load(id, plugins, logger)
             end
         end
 
@@ -63,7 +64,7 @@ function M.unlock(load_fn)
     end
 end
 
-function M.load(id, plugins)
+function M.load(id, plugins, logger)
     if loaded_plugins[id] then return end
     local plugin = plugins[id]
     if not plugin then
@@ -76,13 +77,13 @@ function M.load(id, plugins)
     end
 
     if plugin.status == 'installed' or plugin.status == 'loaded' then
-        _load_with_deps_check(id, plugins)
+        _load_with_deps_check(id, plugins, logger)
     elseif plugin.status == 'installing' then
         table.insert(plugin.on_installed_callbacks, function()
-            _load_with_deps_check(id, plugins)
+            _load_with_deps_check(id, plugins, logger)
         end)
     else
-        vim.notify("Could not load '" .. id .. "' The status is not correct: " .. plugin.status, vim.log.levels.ERROR)
+        logger:error("Could not load '" .. id .. "' The status is not correct: " .. plugin.status)
     end
 end
 
