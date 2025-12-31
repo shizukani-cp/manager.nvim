@@ -30,7 +30,7 @@ local function _process_update_queue(queue, plugins, logger)
                 else
                     logger:info("Successfuly Updated " .. id)
                 end
-                _process_update_queue(queue, plugins)
+                _process_update_queue(queue, plugins, logger)
             end)
         end,
     })
