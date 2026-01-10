@@ -1,3 +1,6 @@
+---@param spec manager.Spec
+---@param plugins table<string, manager.Plugin>
+---@param logger manager.core.Logger
 return function(spec, plugins, logger)
     if not spec.id or not spec.url then
         error("Plugin must have 'id' and 'url'. spec: " .. vim.inspect(spec))

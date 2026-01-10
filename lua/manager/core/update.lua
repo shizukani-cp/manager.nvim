@@ -1,3 +1,6 @@
+---@param queue string[]
+---@param plugins table<string, manager.Plugin>
+---@param logger manager.core.Logger
 local function _process_update_queue(queue, plugins, logger)
     if #queue == 0 then
         return
@@ -36,6 +39,9 @@ local function _process_update_queue(queue, plugins, logger)
     })
 end
 
+---@param target_id? string
+---@param plugins table<string, manager.Plugin>
+---@param logger manager.core.Logger
 return function(target_id, plugins, logger)
     local queue = {}
 

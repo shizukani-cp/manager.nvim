@@ -1,9 +1,14 @@
+---@type table<string, boolean>
 local loaded_plugins = {}
 local is_locked = false
+---@type string[]
 local load_queue = {}
 
 local M = {}
 
+---@param id string
+---@param plugins table<string, manager.Plugin>
+---@param logger manager.core.Logger
 local function _do_load(id, plugins, logger)
     if loaded_plugins[id] then return end
     local plugin = plugins[id]
@@ -16,11 +21,15 @@ local function _do_load(id, plugins, logger)
     logger:info("Successfuly loaded " .. id)
 end
 
+---@param id string
+---@param plugins table<string, manager.Plugin>
+---@param logger manager.core.Logger
 local function _load_with_deps_check(id, plugins, logger)
     if loaded_plugins[id] then return end
     local plugin = plugins[id]
     local dependencies = plugin.spec.dependencies or {}
     local all_deps_installed = true
+    ---@type manager.Plugin[]
     local pending_deps = {}
 
     for _, dep_id in ipairs(dependencies) do
@@ -55,6 +64,7 @@ function M.lock()
     is_locked = true
 end
 
+---@param load_fn fun(id: string)
 function M.unlock(load_fn)
     is_locked = false
     local queue = load_queue
@@ -64,6 +74,9 @@ function M.unlock(load_fn)
     end
 end
 
+---@param id string
+---@param plugins table<string, manager.Plugin>
+---@param logger manager.core.Logger
 function M.load(id, plugins, logger)
     if loaded_plugins[id] then return end
     local plugin = plugins[id]

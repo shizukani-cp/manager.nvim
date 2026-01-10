@@ -1,3 +1,5 @@
+---@param plugins table<string, manager.Plugin>
+---@param logger manager.core.Logger
 return function(plugins, logger)
     local installed_dirs = vim.fn.globpath(require("manager.core.path").install_base_path, '*', true, true)
     local removed_plugins = {}

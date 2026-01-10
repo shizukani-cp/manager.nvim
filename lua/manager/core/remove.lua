@@ -1,3 +1,6 @@
+---@param id string
+---@param plugins table<string, manager.Plugin>
+---@param logger manager.core.Logger
 return function(id, plugins, logger)
     local plugin = plugins[id]
     if not plugin then
