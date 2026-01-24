@@ -30,7 +30,7 @@ return function(spec, plugins, logger)
                     if code == 0 then
                         plugin.status = 'installed'
                         vim.cmd('packloadall!')
-                        logger:info("Successfuly installed " .. "spec.id")
+                        logger:info("Successfuly installed " .. spec.id)
                         for _, callback in ipairs(plugin.on_installed_callbacks) do
                             callback()
                         end
