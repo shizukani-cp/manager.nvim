@@ -16,6 +16,31 @@ return function(spec, plugins, logger)
     if not is_installed then
         local plugin = plugins[spec.id]
         plugin.status = 'installing'
+
+        if plugin.spec.dev then
+            local uv = vim.uv or vim.loop
+            local src = vim.fn.expand(plugin.spec.dir)
+
+            if uv.fs_lstat(install_path) then
+                uv.fs_unlink(install_path)
+            end
+
+            local success, err = uv.fs_symlink(src, install_path, { dir = true, junction = true })
+
+            if success then
+                plugin.status = 'installed'
+                vim.cmd('packloadall!')
+                logger:info("Linked " .. spec.id .. " from " .. src)
+                for _, callback in ipairs(plugin.on_installed_callbacks) do
+                    callback()
+                end
+                plugin.on_installed_callbacks = {}
+            else
+                plugin.status = 'failed'
+                logger:error("Failed to link " .. spec.id .. ": " .. tostring(err))
+            end
+            return
+        end
         local args = { 'git', 'clone', '--depth', '1' }
         if spec.branch then
             table.insert(args, '-b')
