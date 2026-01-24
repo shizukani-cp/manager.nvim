@@ -4,6 +4,8 @@
 ---@field branch? string
 ---@field config? fun()
 ---@field dependencies? string[]
+---@field dev? boolean
+---@field dir? string
 
 ---@class manager.Plugin
 ---@field spec manager.Spec
