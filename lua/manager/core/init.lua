@@ -35,17 +35,9 @@ M.load = function(id)
     require("manager.core.load").load(id, M.plugins, M.logger)
 end
 
-M.lock = function()
-    require("manager.core.load").lock()
-end
-
 ---@param id string
 M.remove = function(id)
     require("manager.core.remove")(id, M.plugins, M.logger)
-end
-
-M.unlock = function()
-    require("manager.core.load").unlock(M.load, M.logger)
 end
 
 ---@param id? string
