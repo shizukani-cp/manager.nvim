@@ -1,4 +1,4 @@
-*manager.txt*    Minimal plugin manager for NeoVim   Last Change: 2025-12-02
+*manager.txt*    Minimal plugin manager for NeoVim   Last Change: 2026-02-22
 
 ==============================================================================
 INTRODUCTION                                              *manager.nvim*
@@ -98,13 +98,6 @@ manager.remove({id})                                    *manager.remove()*
 manager.clean()                                         *manager.clean()*
     Removes any plugin directories that are no longer registered in your
     configuration. This is useful for cleaning up uninstalled plugins.
-
-manager.lock()                                          *manager.lock()*
-    Defers the loading of plugins. Any calls to `manager.load()` after this
-    will be queued until `manager.unlock()` is called.
-
-manager.unlock()                                        *manager.unlock()*
-    Loads all plugins that were queued while in a locked state.
 
 ==============================================================================
 
