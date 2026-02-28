@@ -2,9 +2,9 @@
 local M = {}
 
 ---@type string
-M.install_base_path = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'manager', 'opt')
+M.install_base_path = vim.fs.joinpath(vim.fn.stdpath("data"), "site", "pack", "manager", "opt")
 ---@type string
-M.manager_installed_path = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'manager', 'start', 'manager.nvim')
+M.manager_installed_path = vim.fs.joinpath(vim.fn.stdpath("data"), "site", "pack", "manager", "start", "manager.nvim")
 
 ---@param plugin_id string
 ---@return string

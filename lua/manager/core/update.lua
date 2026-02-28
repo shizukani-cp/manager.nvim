@@ -19,10 +19,12 @@ local function _process_update_queue(queue, plugins, logger)
 
     local stderr_data = {}
 
-    vim.fn.jobstart({ 'git', '-C', install_path, 'pull', '--ff-only' }, {
+    vim.fn.jobstart({ "git", "-C", install_path, "pull", "--ff-only" }, {
         on_stderr = function(_, data)
             for _, line in ipairs(data) do
-                if line ~= "" then table.insert(stderr_data, line) end
+                if line ~= "" then
+                    table.insert(stderr_data, line)
+                end
             end
         end,
         on_exit = function(_, code)

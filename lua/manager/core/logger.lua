@@ -30,7 +30,9 @@ function Logger:on(callback)
     self.handlers[id] = callback
     self._next_id = self._next_id + 1
 
-    return function() self:off(id) end
+    return function()
+        self:off(id)
+    end
 end
 
 ---@param id number
@@ -63,22 +65,32 @@ end
 ---@param level_filter? "DEBUG"|"INFO"|"WARN"|"ERROR"
 ---@return manager.core.Logger.Entry[]
 function Logger:get_logs(level_filter)
-    if not level_filter then return self.entries end
+    if not level_filter then
+        return self.entries
+    end
     return vim.tbl_filter(function(e)
         return e.level >= level_filter
     end, self.entries)
 end
 
 ---@param m string
-function Logger:debug(m) self:log(levels.DEBUG, m) end
+function Logger:debug(m)
+    self:log(levels.DEBUG, m)
+end
 
 ---@param m string
-function Logger:info(m) self:log(levels.INFO, m) end
+function Logger:info(m)
+    self:log(levels.INFO, m)
+end
 
 ---@param m string
-function Logger:warn(m) self:log(levels.WARN, m) end
+function Logger:warn(m)
+    self:log(levels.WARN, m)
+end
 
 ---@param m string
-function Logger:error(m) self:log(levels.ERROR, m) end
+function Logger:error(m)
+    self:log(levels.ERROR, m)
+end
 
 return Logger

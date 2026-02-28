@@ -1,7 +1,7 @@
 ---@param plugins table<string, manager.Plugin>
 ---@param logger manager.core.Logger
 return function(plugins, logger)
-    local installed_dirs = vim.fn.globpath(require("manager.core.path").install_base_path, '*', true, true)
+    local installed_dirs = vim.fn.globpath(require("manager.core.path").install_base_path, "*", true, true)
     local removed_plugins = {}
 
     if #installed_dirs == 0 then
@@ -10,10 +10,10 @@ return function(plugins, logger)
 
     for _, path in ipairs(installed_dirs) do
         if vim.fn.isdirectory(path) == 1 then
-            local id = vim.fn.fnamemodify(path, ':t')
+            local id = vim.fn.fnamemodify(path, ":t")
 
             if not plugins[id] then
-                local ok, err = pcall(vim.fn.delete, path, 'rf')
+                local ok, err = pcall(vim.fn.delete, path, "rf")
                 if ok then
                     table.insert(removed_plugins, id)
                 else

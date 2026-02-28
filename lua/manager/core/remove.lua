@@ -10,9 +10,9 @@ return function(id, plugins, logger)
 
     local path = require("manager.core.path").plugin_path(id)
     if vim.fn.isdirectory(path) == 1 then
-        local ok, err = pcall(vim.fn.delete, path, 'rf')
+        local ok, err = pcall(vim.fn.delete, path, "rf")
         if ok then
-            plugin.status = 'new'
+            plugin.status = "new"
             logger:info("Plugin '" .. id .. "' removed.")
         else
             logger:error("Failed to remove '" .. id .. "': " .. err)
