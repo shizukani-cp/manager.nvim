@@ -108,4 +108,18 @@ manager:clean()                                         *manager:clean()*
 
 ==============================================================================
 
+LOGGING                                                     *manager-logging*
+
+Each manager instance has its own logger available at `manager.logger`.
+
+manager.logger:on({callback})                            `manager.logger:on()`
+    Registers a callback function that will be called whenever a new
+    log entry is added. Returns a function to unregister.
+
+manager.logger:get_logs({level})                    `manager.logger:get_logs()`
+    Returns a list of log entries. If `{level}` is provided, filters
+    logs by that level (e.g., "INFO", "ERROR").
+
+===============================================================================
+
 vim:tw=78:ft=help:norl:
