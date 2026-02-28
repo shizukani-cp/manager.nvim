@@ -1,6 +1,4 @@
----@param plugins table<string, manager.Plugin>
----@param logger manager.core.Logger
-return function(plugins, logger)
+return function(self)
     local installed_dirs = vim.fn.globpath(require("manager.core.path").install_base_path, "*", true, true)
     local removed_plugins = {}
 
@@ -12,15 +10,15 @@ return function(plugins, logger)
         if vim.fn.isdirectory(path) == 1 then
             local id = vim.fn.fnamemodify(path, ":t")
 
-            if not plugins[id] then
+            if not self.plugins[id] then
                 local ok, err = pcall(vim.fn.delete, path, "rf")
                 if ok then
                     table.insert(removed_plugins, id)
                 else
-                    logger:error("Failed to remove '" .. id .. "': " .. err)
+                    self.logger:error("Failed to remove '" .. id .. "': " .. err)
                 end
             end
         end
     end
-    logger:info("Successfully cleared untracked plugins.")
+    self.logger:info("Successfully cleared untracked plugins.")
 end

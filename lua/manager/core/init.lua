@@ -12,37 +12,28 @@
 ---@field status 'new'|'installing'|'installed'|'loaded'|'failed'
 ---@field on_installed_callbacks fun()[]
 
----@class manager
-local M = {}
+---@class Manager
+---@field plugins table<string, manager.Plugin>
+---@field logger manager.core.Logger
+local Manager = {}
+Manager.__index = Manager
 
----@type table<string, manager.Plugin>
-M.plugins = {}
-
----@type manager.core.Logger
-M.logger = require("manager.core.logger").new()
-
----@param spec manager.Spec
-M.add = function(spec)
-    require("manager.core.add")(spec, M.plugins, M.logger)
+---@return Manager
+function Manager.new()
+    local self = setmetatable({}, Manager)
+    self.plugins = {}
+    self.logger = require("manager.core.logger").new()
+    return self
 end
 
-M.clean = function()
-    require("manager.core.clean")(M.plugins, M.logger)
-end
+Manager.add = require("manager.core.add")
 
----@param id string
-M.load = function(id)
-    require("manager.core.load").load(id, M.plugins, M.logger)
-end
+Manager.clean = require("manager.core.clean")
 
----@param id string
-M.remove = function(id)
-    require("manager.core.remove")(id, M.plugins, M.logger)
-end
+Manager.load = require("manager.core.load").load
 
----@param id? string
-M.update = function(id)
-    require("manager.core.update")(id, M.plugins, M.logger)
-end
+Manager.remove = require("manager.core.remove")
 
-return M
+Manager.update = require("manager.core.update")
+
+return Manager

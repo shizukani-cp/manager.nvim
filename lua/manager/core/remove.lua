@@ -1,10 +1,8 @@
 ---@param id string
----@param plugins table<string, manager.Plugin>
----@param logger manager.core.Logger
-return function(id, plugins, logger)
-    local plugin = plugins[id]
+return function(self, id)
+    local plugin = self.plugins[id]
     if not plugin then
-        logger:warn("Plugin '" .. id .. "' not found.")
+        self.logger:warn("Plugin '" .. id .. "' not found.")
         return
     end
 
@@ -13,11 +11,11 @@ return function(id, plugins, logger)
         local ok, err = pcall(vim.fn.delete, path, "rf")
         if ok then
             plugin.status = "new"
-            logger:info("Plugin '" .. id .. "' removed.")
+            self.logger:info("Plugin '" .. id .. "' removed.")
         else
-            logger:error("Failed to remove '" .. id .. "': " .. err)
+            self.logger:error("Failed to remove '" .. id .. "': " .. err)
         end
     else
-        logger:warn("Plugin directory for '" .. id .. "' does not exist.")
+        self.logger:warn("Plugin directory for '" .. id .. "' does not exist.")
     end
 end

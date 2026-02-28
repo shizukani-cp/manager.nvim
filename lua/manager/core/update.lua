@@ -1,7 +1,5 @@
 ---@param queue string[]
----@param plugins table<string, manager.Plugin>
----@param logger manager.core.Logger
-local function _process_update_queue(queue, plugins, logger)
+local function _process_update_queue(manager, queue)
     if #queue == 0 then
         return
     end
@@ -31,26 +29,24 @@ local function _process_update_queue(queue, plugins, logger)
             vim.schedule(function()
                 if code ~= 0 and #stderr_data > 0 then
                     local msg = table.concat(stderr_data, "\n")
-                    logger:error("Update failed [" .. id .. "]:\n" .. msg)
+                    manager.logger:error("Update failed [" .. id .. "]:\n" .. msg)
                 else
-                    logger:info("Successfuly Updated " .. id)
+                    manager.logger:info("Successfuly Updated " .. id)
                 end
-                _process_update_queue(queue, plugins, logger)
+                _process_update_queue(manager, queue)
             end)
         end,
     })
 end
 
 ---@param target_id? string
----@param plugins table<string, manager.Plugin>
----@param logger manager.core.Logger
-return function(target_id, plugins, logger)
+return function(self, target_id)
     local queue = {}
 
     if target_id then
         table.insert(queue, target_id)
     else
-        for id, _ in pairs(plugins) do
+        for id, _ in pairs(self.plugins) do
             table.insert(queue, id)
         end
     end
@@ -58,5 +54,5 @@ return function(target_id, plugins, logger)
     if #queue == 0 then
         return
     end
-    _process_update_queue(queue, plugins, logger)
+    _process_update_queue(self, queue)
 end
