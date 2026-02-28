@@ -6,7 +6,7 @@ return function(self, spec)
     if self.plugins[spec.id] then
         return
     end
-    local install_path = require("manager.core.path").plugin_path(spec.id)
+    local install_path = self:plugin_path(spec.id)
     local is_installed = vim.fn.isdirectory(install_path) == 1
     self.plugins[spec.id] = {
         spec = spec,

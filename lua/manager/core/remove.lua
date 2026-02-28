@@ -6,7 +6,7 @@ return function(self, id)
         return
     end
 
-    local path = require("manager.core.path").plugin_path(id)
+    local path = self:plugin_path(id)
     if vim.fn.isdirectory(path) == 1 then
         local ok, err = pcall(vim.fn.delete, path, "rf")
         if ok then
