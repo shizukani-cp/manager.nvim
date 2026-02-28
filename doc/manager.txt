@@ -1,4 +1,4 @@
-*manager.txt*    Minimal plugin manager for NeoVim   Last Change: 2026-02-22
+*manager.txt*    Minimal plugin manager for NeoVim   Last Change: 2026-03-01
 
 ==============================================================================
 INTRODUCTION                                              *manager.nvim*
@@ -35,9 +35,9 @@ USAGE                                                   *manager-usage*
 To use manager.nvim, load it in your configuration file and add your plugins:
 
 >lua
-    local manager = require("manager.core")
+    local manager = require("manager.core").new()
 
-    manager.add({
+    manager:add({
         id = "telescope.nvim",
         url = "https://github.com/nvim-telescope/telescope.nvim",
         dependencies = {
@@ -48,23 +48,28 @@ To use manager.nvim, load it in your configuration file and add your plugins:
         end
     })
 
-    manager.add({
+    manager:add({
         id = "plenary.nvim",
         url = "https://github.com/nvim-lua/plenary.nvim",
     })
 
-    manager.load("telescope.nvim")
+    manager:load("telescope.nvim")
 <
 
 Each plugin configuration requires an `id` (unique name) and a `url` (the plugin GitHub repository).
 You can specify dependencies and a `config` function to set up your plugin after loading if needed.
-To load a plugin, use `manager.load("plugin_id")`.
+To load a plugin, use `manager:load("plugin_id")`.
 
 ==============================================================================
 
 FUNCTIONS                                                   *manager-functions*
 
-manager.add({spec})                                     *manager.add()*
+Manager.new({name})                                     *manager.new()*
+    Creates a new instance of the manager.
+    `{name}` (string, optional) The name used for the installation
+             directory under site/pack/. Defaults to "manager".
+
+manager:add({spec})                                     *manager:add()*
     Registers a plugin. If the plugin is not already installed, it will be
     cloned from its git repository.
 
@@ -77,25 +82,27 @@ manager.add({spec})                                     *manager.add()*
                    depends on.
     `config`       (function, optional) A function to run after the plugin is
                    loaded.
+    `dev`          (boolean, optional) If true, uses local directory.
+    `dir`          (string, optional) Path to local plugin for dev mode.
 
-manager.load({id})                                      *manager.load()*
+manager:load({id})                                      *manager:load()*
     Loads a plugin and its dependencies. This runs `packadd` and executes
     the `config` function if provided. If a plugin is still being
     installed, it will be loaded automatically after installation is
     complete.
 
-manager.update({id})                                    *manager.update()*
+manager:update({id})                                    *manager:update()*
     Updates plugins by pulling the latest changes from their git
     repositories.
     If `{id}` is provided, only that plugin is updated. The special id
     `"self"` will update manager.nvim itself.
     If `{id}` is omitted, all registered plugins are updated.
 
-manager.remove({id})                                    *manager.remove()*
+manager:remove({id})                                    *manager:remove()*
     Removes an installed plugin by deleting its directory. The plugin's
     configuration remains, and it will be re-installed if needed.
 
-manager.clean()                                         *manager.clean()*
+manager:clean()                                         *manager:clean()*
     Removes any plugin directories that are no longer registered in your
     configuration. This is useful for cleaning up uninstalled plugins.
 
