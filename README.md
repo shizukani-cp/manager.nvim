@@ -26,9 +26,9 @@ You need NeoVim 0.5 or newer and Git installed.
 To use manager.nvim, load it in your configuration file and add your plugins:
 
 ```lua
-local manager = require("manager.core")
+local manager = require("manager.core").new()
 
-manager.add({
+manager:add({
     id = "telescope.nvim",
     url = "https://github.com/nvim-telescope/telescope.nvim",
     dependencies = {
@@ -39,16 +39,16 @@ manager.add({
     end
 })
 
-manager.add({
+manager:add({
     id = "plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim",
 })
 
-manager.load("telescope.nvim")
+manager:load("telescope.nvim")
 ```
 Each plugin configuration requires an `id` (unique name) and a `url` (the plugin GitHub repository).
 You can specify dependencies and a `config` function to set up your plugin after loading if needed.
-To load a plugin, use `manager.load("plugin_id")`.
+To load a plugin, use `manager:load("plugin_id")`.
 
 ## Contributing
 
