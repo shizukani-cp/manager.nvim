@@ -8,9 +8,9 @@ local function _process_update_queue(manager, queue)
     local install_path
 
     if id == "self" then
-        install_path = self.manager_installed_path
+        install_path = manager.manager_installed_path
     else
-        install_path = self:plugin_path(id)
+        install_path = manager:plugin_path(id)
     end
 
     install_path = vim.fn.expand(install_path)
