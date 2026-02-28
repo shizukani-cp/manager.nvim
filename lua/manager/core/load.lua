@@ -11,7 +11,7 @@ local function _do_load(manager, id)
     local plugin = manager.plugins[id]
     vim.cmd("packadd " .. plugin.spec.id)
     if type(plugin.spec.config) == "function" then
-        plugin.spec.config()
+        plugin.spec.config(manager)
     end
     loaded_plugins[id] = true
     plugin.status = "loaded"
