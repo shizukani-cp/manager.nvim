@@ -37,7 +37,6 @@ return function(self, spec)
         end
 
         if plugin.spec.dev then
-            local uv = vim.uv or vim.loop
             local src = vim.fn.expand(plugin.spec.dir)
 
             if uv.fs_lstat(install_path) then

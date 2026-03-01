@@ -40,7 +40,7 @@ function Logger:off(id)
     self.handlers[id] = nil
 end
 
----@param level "DEBUG"|"INFO"|"WARN"|"ERROR"
+---@param level number
 ---@param msg string
 function Logger:log(level, msg)
     ---@type manager.core.Logger.Entry
@@ -62,7 +62,7 @@ function Logger:log(level, msg)
     end
 end
 
----@param level_filter? "DEBUG"|"INFO"|"WARN"|"ERROR"
+---@param level_filter? number
 ---@return manager.core.Logger.Entry[]
 function Logger:get_logs(level_filter)
     if not level_filter then
