@@ -1,3 +1,5 @@
+local uv = vim.uv or vim.loop
+
 ---@param spec manager.Spec
 return function(self, spec)
     if not spec.id or not spec.url then
@@ -7,15 +9,32 @@ return function(self, spec)
         return
     end
     local install_path = self:plugin_path(spec.id)
-    local is_installed = vim.fn.isdirectory(install_path) == 1
+    local is_ok = (function()
+        if vim.fn.isdirectory(install_path) == 1 then
+            local stat = uv.fs_lstat(install_path)
+            local current_type = stat and stat.type
+            if current_type == "link" and spec.dev then
+                return true
+            elseif current_type == "directory" and not spec.dev then
+                return true
+            else
+                return false
+            end
+        end
+        return false
+    end)()
     self.plugins[spec.id] = {
         spec = spec,
-        status = is_installed and "installed" or "new",
+        status = is_ok and "installed" or "new",
         on_installed_callbacks = {},
     }
-    if not is_installed then
+    if not is_ok then
         local plugin = self.plugins[spec.id]
         plugin.status = "installing"
+
+        if vim.fn.isdirectory(install_path) == 1 or uv.fs_lstat(install_path) then
+            vim.fn.delete(install_path, "rf")
+        end
 
         if plugin.spec.dev then
             local uv = vim.uv or vim.loop
