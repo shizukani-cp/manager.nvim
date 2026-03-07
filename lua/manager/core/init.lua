@@ -37,7 +37,7 @@ Manager.add = require("manager.core.add")
 
 Manager.clean = require("manager.core.clean")
 
-Manager.load = require("manager.core.load").load
+Manager.load = require("manager.core.load")
 
 Manager.remove = require("manager.core.remove")
 

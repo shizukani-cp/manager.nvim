@@ -1,8 +1,6 @@
 ---@type table<string, boolean>
 local loaded_plugins = {}
 
-local M = {}
-
 ---@param id string
 local function _do_load(manager, id)
     if loaded_plugins[id] then
@@ -30,7 +28,7 @@ local function _load_with_deps_check(manager, id)
     local pending_deps = {}
 
     for _, dep_id in ipairs(dependencies) do
-        M.load(manager, dep_id)
+        manager:load(dep_id)
         local dep_plugin = manager.plugins[dep_id]
         if dep_plugin.status ~= "installed" and dep_plugin.status ~= "loaded" then
             all_deps_installed = false
@@ -58,7 +56,7 @@ local function _load_with_deps_check(manager, id)
 end
 
 ---@param id string
-function M.load(self, id)
+return function(self, id)
     if loaded_plugins[id] then
         return
     end
@@ -77,5 +75,3 @@ function M.load(self, id)
         self.logger:error("Could not load '" .. id .. "' The status is not correct: " .. plugin.status)
     end
 end
-
-return M
