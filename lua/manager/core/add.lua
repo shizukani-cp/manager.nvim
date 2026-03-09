@@ -9,20 +9,15 @@ return function(self, spec)
         return
     end
     local install_path = self:plugin_path(spec.id)
-    local is_ok = (function()
-        if vim.fn.isdirectory(install_path) == 1 then
-            local stat = uv.fs_lstat(install_path)
-            local current_type = stat and stat.type
-            if current_type == "link" and spec.dev then
-                return true
-            elseif current_type == "directory" and not spec.dev then
-                return true
-            else
-                return false
-            end
+    local stat = uv.fs_lstat(install_path)
+    local is_ok = false
+    if stat then
+        if spec.dev then
+            is_ok = (stat.type == "link")
+        else
+            is_ok = (stat.type == "directory")
         end
-        return false
-    end)()
+    end
     self.plugins[spec.id] = {
         spec = spec,
         status = is_ok and "installed" or "new",
