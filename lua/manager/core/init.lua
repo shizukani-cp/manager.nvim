@@ -41,8 +41,6 @@ Manager.load = require("manager.core.load")
 
 Manager.remove = require("manager.core.remove")
 
-Manager.update = require("manager.core.update")
-
 Manager.plugin_path = function(self, plugin_id)
     return vim.fs.joinpath(self.install_base_path, plugin_id)
 end

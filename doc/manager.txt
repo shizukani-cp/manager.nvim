@@ -91,13 +91,6 @@ manager:load({id})                                      *manager:load()*
     installed, it will be loaded automatically after installation is
     complete.
 
-manager:update({id})                                    *manager:update()*
-    Updates plugins by pulling the latest changes from their git
-    repositories.
-    If `{id}` is provided, only that plugin is updated. The special id
-    `"self"` will update manager.nvim itself.
-    If `{id}` is omitted, all registered plugins are updated.
-
 manager:remove({id})                                    *manager:remove()*
     Removes an installed plugin by deleting its directory. The plugin's
     configuration remains, and it will be re-installed if needed.
