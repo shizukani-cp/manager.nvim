@@ -91,14 +91,6 @@ manager:load({id})                                      *manager:load()*
     installed, it will be loaded automatically after installation is
     complete.
 
-manager:remove({id})                                    *manager:remove()*
-    Removes an installed plugin by deleting its directory. The plugin's
-    configuration remains, and it will be re-installed if needed.
-
-manager:clean()                                         *manager:clean()*
-    Removes any plugin directories that are no longer registered in your
-    configuration. This is useful for cleaning up uninstalled plugins.
-
 ==============================================================================
 
 LOGGING                                                     *manager-logging*
